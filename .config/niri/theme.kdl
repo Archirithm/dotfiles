@@ -1,0 +1,5 @@
+cursor {
+    // Set the cursor theme name
+    xcursor-theme "Bibata-Modern-Ice"
+    xcursor-size 24
+}
