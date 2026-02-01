@@ -1,0 +1,209 @@
+{
+  "niri/workspaces#numbers": {
+	"active-only": false,
+	"all-outputs": true,
+	"format": "{icon}",
+	"show-special": false,
+	"on-click": "activate",
+    "persistent-workspaces": {
+      "*": 5
+	},
+	"format-icons": {
+		"1": "1",
+		"2": "2",
+		"3": "3",
+		"4": "4",
+		"5": "5",
+		"6": "6",
+		"7": "7",
+		"8": "8",
+		"9": "9",
+		"10": "10"
+	}
+  },
+  "custom/cava": {
+    "exec": "sh ~/.config/waybar/cava.sh",
+    "format": "{}",
+    "tooltip": false,
+    
+    "layer": "below",
+    "output": "all"
+  },
+  "niri/mode": {
+    "format": "<span style=\"italic\">{}</span>"
+  },
+  "tray": {
+    // "icon-size": 14,
+    "spacing": 5
+  },
+  "clock": {
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 3,
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "on-click-right": "mode",
+      "format": {
+	"months": "<span color='#bb9af7'><b>{}</b></span>",  // Purple
+	"days": "<span color='#7aa2f7'><b>{}</b></span>",    // Blue
+	"weeks": "<span color='#9ece6a'><b>W{}</b></span>",  // Green
+	"weekdays": "<span color='#e0af68'><b>{}</b></span>",// Yellow
+	"today": "<span background='#2ac3de' color='#1a1b26'><b><u>{}</u></b></span>" // Cyan background with dark text
+      }
+    },
+    "actions": {
+      "on-click-right": "mode",
+      "on-click-forward": "tz_up",
+      "on-click-backward": "tz_down",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    },
+    "format": "{:%a %d %b | %I:%M %p}", //12 hour format
+    "format-alt": "  {:%Y-%m-%d  %H:%M:%S}",
+    "interval": 1
+  },
+
+  // System
+  "custom/system": {
+    "format": "",
+    "tooltip": false
+  },
+
+  //左键循环切换性能模式
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Performance mode:{profile}",
+    "tooltip": true,
+    "format-icons": {
+      "performance": "󱐋",
+      "balanced": "",
+      "power-saver": ""
+    }
+  },
+
+  "cpu": {
+    "interval": 10,
+    "format": "󰍛 {usage}%",
+    "rotate": 0,
+    "format-alt": "{icon0}{icon1}{icon2}{icon3}",
+    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+  },
+  "memory": {
+    "states": {
+      "c": 90,
+      "h": 60,
+      "m": 30
+    },
+    "interval": 30,
+    "format": "\udb83\udf86 {used}GB",
+    "rotate": 0,
+    "format-m": "\udb83\udf85 {used}GB",
+    "format-h": "\udb81\udcc5 {used}GB",
+    "format-c": "\uf421 {used}GB",
+    "format-alt": "\udb83\udf86 {percentage}%",
+    "max-length": 10,
+    "tooltip": true,
+    //"tooltip-format": "\udb83\udf86 {percentage}%\n\ue266 {used:0.1f}GB/{total:0.1f}GB",
+    "tooltip-format": "\udb83\udf86 Memory usage: {percentage}%\n\ue266 Used: {used:0.2f}GB / {total:0.2f}GB\n\uf85a Available: {avail:0.2f}GB\n\uf233 Swap used: {swapUsed:0.2f}GB / {swapTotal:0.2f}GB ({swapPercentage}%)"
+  },
+  "temperature": {
+    "thermal-zone": 4,
+    // "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
+    "critical-threshold": 80,
+    // "format-critical": "{temperatureC}°C ",
+    "format": " {temperatureC}°C"
+  },
+  // Harddisc space used
+  "disk": {
+    // "interval": 30,
+    "format": " {percentage_used}% ",
+    "path": "/",
+    //"on-click": "ghostty -e htop"
+  }, 
+    // Group Hardware
+    "group/hardware": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 300,
+            "children-class": "not-memory",
+            "transition-left-to-right": false
+        },        
+        "modules": [
+            "custom/system",
+            "disk",
+            "cpu",
+	    "power-profiles-daemon",
+            "memory"
+            // "backlight",
+            //"niri/language"
+        ]
+    },
+  
+  "battery": {
+    "states": {
+      // "good": 95,
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity: >3}%",
+    "format-charging": "  {capacity}%",
+    "format-plugged": "  {capacity}%",
+    "format-alt": "{icon}  {time}",
+    // "format-good": "", // An empty format will hide the module
+    // "format-full": "",
+    "format-icons": ["", "", "", "", ""]
+  },
+  "network": {
+    // "interface": "wlp2s0", // (Optional) To force the use of this interface
+    "format": "⚠ Disabled",
+    "format-wifi": " {essid}",
+    // "format-ethernet": " {ifname}: {ipaddr}/{cidr}",
+    "format-ethernet": "  Wired",
+    "format-disconnected": "⚠ Disconnected",
+    "tooltip-format": " {ifname} via {gwaddr}",
+    "tooltip-format-wifi": "  {essid} ({signalStrength}%)",
+    "tooltip-format-ethernet": "  {ifname} ({ipaddr}/{cidr})",
+    "tooltip-format-disconnected": "⚠ Disconnected", 
+    // "on-click": "ghostty -e nmtui"
+    "on-click": "nm-connection-editor"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}",
+    "rotate": 0,
+    "format-muted": "婢",
+    "on-click": "pavucontrol",
+    // "on-scroll-up": "pamixer -ui 2 && pamixer --get-volume > $SWAYSOCK.wob",
+    // "on-scroll-down": "pamixer -ud 2 && pamixer --get-volume > $SWAYSOCK.wob"
+    "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+    "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
+    "tooltip-format": "{icon} {desc} // {volume}%",
+    "scroll-step": 5,
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""]
+    }
+  },
+  "custom/pacman": {
+    "format": " {}",
+    "interval": 7200, // every two hours
+    "exec": "i=$(checkupdates); echo \"$i\" |wc -l; echo \"$i\" |column -t |tr '\n' '\r'", // # of updates and tooltip details
+    "exec-if": "exit 0", // always run; consider advanced run conditions
+    "on-click": "kitty -e sudo pacman -Syu", // update system
+    "signal": 8
+  },
+  "custom/power": {
+    "format": "⏻",
+    "on-click": "wlogout -p layer-shell -b 2",
+    //"on-click": "~/.config/rofi/powermenu/powermenu.sh",
+    "tooltip": false
+  }
+}
+
+
+

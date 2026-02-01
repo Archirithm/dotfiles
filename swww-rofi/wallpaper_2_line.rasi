@@ -1,0 +1,85 @@
+@import "/home/archirithm/.config/rofi/colors.rasi"
+ * {
+    /* 柔和粉紫基调 */
+    base-bg: rgba(30, 30, 46, 0.85);      
+    selected-bg: #6c7086;
+
+    background-color:transparent;
+    border-radius: 1.2em;
+    text-color: #cdd6f4;
+}
+
+window {
+    width: 1000px;
+    height: 600px;
+    border: 2px;
+    border-radius: 1.2em;
+    border-color: @secondary;
+    location:center;
+    children:["inputbar","listbox"];
+    background-color:@base-bg;
+}
+
+
+
+
+inputbar { 
+    enabled:                     true;
+    padding:                     95px;
+    margin:                      10px 10px 10px 10px; 
+    children:                    [ "entry" ];
+    background-image:            url("~/.cache/wallpaper_rofi/current",width);
+    horizontal-align:            1;
+    vertical-align:              0;
+}
+
+entry { 
+  padding:                       10px;
+  background-color:              @surface;
+  expand: true;
+  placeholder: "  Search / Choose Wallpaper";
+  horizontal-align: 0;
+}
+
+listbox {
+    orientation:vertical;
+    children:[listview];
+}
+
+listview {
+    fixed-height: false;
+    dynamic: true;
+    lines: 2;
+    columns: 5; 
+    spacing: 15px;
+    children:[element];
+}
+
+
+element {
+    enabled:                     true;
+    orientation:                 vertical;
+    spacing:                     5px;
+    padding:                     10px;
+    border-radius:               1.2em;
+    cursor:                      pointer;
+    background-color:            transparent;
+    text-color:                  @surface;
+}
+
+element selected {
+    background-color:            @secondary-blured;
+    text-color:                  @surface;
+}
+
+element-icon {
+    size:                        120px;
+    cursor:                      inherit;
+}
+
+element-text {
+    horizontal-align:            0.5;
+    cursor:                      inherit;
+    font:                        "JetBrainsMono Nerd Font 9";
+}
+

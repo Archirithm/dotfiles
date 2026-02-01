@@ -1,0 +1,82 @@
+* {
+    background-image: none;
+    font-size: 20px; }
+
+@import "/home/archirithm/.config/wlogout/theme.css";
+@import "/home/archirithm/.config/waybar/colors.css";
+
+window {
+    background-color: rgba(0, 0, 0, 0.5); }
+
+button {
+    color: #FFFFFF; 
+    background-color: rgba(30, 30, 46, 0.8); 
+    outline-style: none;
+    border: none;
+    border-width: 0px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20%; 
+    border-radius: 0px;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+button:focus {
+    background-color: @tertiary; 
+    background-size: 20%;
+}
+
+button:hover {
+    background-color: @primary; 
+    background-size: 25%;
+    border-radius: 20px; 
+    transition: all 0.3s cubic-bezier(.55,0.0,.28,1.682);
+}
+
+
+button:hover#lock {
+    border-radius: 40px 40px 0px 40px;
+    margin : 150px 0px 0px 550px; 
+}
+
+button:hover#logout {
+    border-radius: 40px 0px 40px 40px;
+    margin : 0px 0px 150px 550px;
+}
+
+button:hover#shutdown {
+    border-radius: 40px 40px 40px 0px;
+    margin : 150px 550px 0px 0px;
+}
+
+button:hover#reboot {
+    border-radius: 0px 40px 40px 40px;
+    margin : 0px 550px 150px 0px;
+}
+
+
+#lock {
+    background-image: image(url("/home/archirithm/.config/wlogout/icons/lock_white.png"));
+    border-radius: 60px 0px 0px 0px; 
+    margin : 200px 0px 0px 600px; 
+}
+
+#logout {
+    background-image: image(url("/home/archirithm/.config/wlogout/icons/logout_white.png"));
+    border-radius: 0px 0px 0px 60px;
+    margin : 0px 0px 200px 600px;
+}
+
+#shutdown {
+    background-image: image(url("/home/archirithm/.config/wlogout/icons/shutdown_white.png"));
+    border-radius: 0px 60px 0px 0px;
+    margin : 200px 600px 0px 0px;
+}
+
+#reboot {
+    background-image: image(url("/home/archirithm/.config/wlogout/icons/reboot_white.png"));
+    border-radius: 0px 0px 60px 0px;
+    margin : 0px 600px 200px 0px;
+}
+
