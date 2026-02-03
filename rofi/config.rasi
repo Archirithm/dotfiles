@@ -24,7 +24,7 @@ configuration {
 }
 
 @theme "~/.config/rofi/theme.rasi"
-@import "colors.rasi"
+@import "~/.config/rofi/colors.rasi"
 
 
 // Main //
@@ -37,7 +37,8 @@ window {
     cursor:                      "default";
     spacing:                     0em;
     padding:                     0em;
-    border-color:                @tertiary;
+    border:                      2px;
+    border-color:                @secondary-fixed;
     background-color:            @main-bg;
     border-radius:               1.2em;
 }
@@ -131,10 +132,10 @@ element {
     padding:                     0.4em 0.4em 0.4em 1.5em;
     cursor:                      pointer;
     background-color:            transparent;
-    text-color:                  @secondary;
+    text-color:                  @primary;
 }
 element selected.normal {
-    background-color:            @primary-fixed;
+    background-color:            @primary;
     text-color:                  @surface-bright;
     border-radius:               1.2em;
     
