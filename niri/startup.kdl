@@ -1,0 +1,14 @@
+// 询问管理员权限功能（身份验证）
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+// 通知程序
+// 输入法
+spawn-at-startup "fcitx5"
+spawn-at-startup "nm-applet"
+spawn-at-startup "blueman-applet"
+spawn-at-startup "swww-daemon"
+spawn-at-startup "quickshell"
+
+// 总览界面背景壁纸的守护进程
+spawn-sh-at-startup "swww-daemon -n overview"
+
+spawn-sh-at-startup "clipse --listen"
