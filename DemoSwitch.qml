@@ -1,16 +1,16 @@
 import QtQuick
 import QtQuick.Window 
 import QtQuick.Shapes 1.15 
-// 如果报错找不到模块，请注释掉下面这行，改用 import QtGraphicalEffects 1.15
 import Qt5Compat.GraphicalEffects 
 
 Window {
     id: window
-    width: 600; height: 300
+    width: 600;
+    height: 300
     visible: true
     color: "transparent"
     flags: Qt.FramelessWindowHint | Qt.Window
-    title: "Quickshell Demo (Perfect Sync)"
+    title: "Quickshell Demo (Perfect Repulsion Sync)"
 
     MouseArea { 
         anchors.fill: parent
@@ -30,14 +30,10 @@ Window {
         property int animTime: 1000 
         property var cssBezier: [0.56, 1.35, 0.52, 1.0, 1.0, 1.0]
 
-        // =================================================================
-        // 【改进 1】：使用 Item 包裹内容并应用 OpacityMask 裁切
-        // =================================================================
         Item {
             id: switchContent
             anchors.fill: parent
             
-            // 开启遮罩：实现完美的抗锯齿圆角裁剪
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
@@ -56,7 +52,6 @@ Window {
             }
 
             // --- [B] 光晕 (Halos) ---
-            // 【改进 2】：光晕位置完全跟随 mainButton (太阳/月亮)
             Item {
                 width: parent.width
                 height: parent.height
@@ -73,18 +68,13 @@ Window {
                         radius: width/2
                         color: "white"
                         opacity: d.op
-                        
-                        // 1. 垂直跟随：居中并稍微上移 (模拟原设计的偏移)
                         y: (mainButton.y + mainButton.height/2) - (height/2) - (5 * switchRoot.s)
-                        
-                        // 2. 水平跟随：完全绑定到 mainButton 的中心
-                        // 这样当按钮做“欲拒还迎”的 Peek 动画时，光晕也会跟着动！
                         x: (mainButton.x + mainButton.width/2) - (width/2)
                     }
                 }
             }
 
-            // --- [C] 云朵 (Clouds) ---
+            // --- [C] 云朵 (带斥力逻辑) ---
             Item {
                 id: cloudsContainer
                 width: parent.width
@@ -117,10 +107,21 @@ Window {
                         model: cloudsContainer.cloudData.length
                         delegate: Rectangle {
                             property var d: cloudsContainer.cloudData[index]
-                            width: d.w * switchRoot.s; height: width
-                            radius: width/2; color: "white"; opacity: 1.0 
-                            x: switchRoot.width - (d.r * switchRoot.s) - width - (15 * switchRoot.s)
+                            
+                            // --- 斥力计算 ---
+                            property real baseX: switchRoot.width - (d.r * switchRoot.s) - width - (15 * switchRoot.s)
+                            property real proximityFactor: (d.r + 20) / 130.0
+                            property real pushOffset: (!switchRoot.isDark && interactArea.containsMouse) ? (15 * switchRoot.s * proximityFactor) : 0
+                            
+                            x: baseX + pushOffset
                             y: switchRoot.height - (d.b * switchRoot.s) - height - (15 * switchRoot.s)
+                            width: d.w * switchRoot.s
+                            height: width
+                            radius: width/2
+                            color: "white"
+                            
+                            Behavior on x { NumberAnimation { duration: 600; easing.type: Easing.OutQuad } }
+
                             transform: Translate {
                                 id: lightCloudTrans
                                 Behavior on x { NumberAnimation { duration: 1200 } }
@@ -134,6 +135,7 @@ Window {
                                     lightCloudTrans.x = (Math.random() > 0.5 ? range : -range)
                                     lightCloudTrans.y = (Math.random() > 0.5 ? range : -range)
                                 }
+                                onRunningChanged: if(!running) { lightCloudTrans.x = 0; lightCloudTrans.y = 0; }
                             }
                         }
                     }
@@ -144,10 +146,21 @@ Window {
                     model: cloudsContainer.cloudData.length
                     delegate: Rectangle {
                         property var d: cloudsContainer.cloudData[index]
-                        width: d.w * switchRoot.s; height: width
-                        radius: width/2; color: "white"; opacity: 1.0
-                        x: switchRoot.width - (d.r * switchRoot.s) - width
+                        
+                        // --- 斥力计算 ---
+                        property real baseX: switchRoot.width - (d.r * switchRoot.s) - width
+                        property real proximityFactor: (d.r + 20) / 130.0
+                        property real pushOffset: (!switchRoot.isDark && interactArea.containsMouse) ? (18 * switchRoot.s * proximityFactor) : 0
+                        
+                        x: baseX + pushOffset
                         y: switchRoot.height - (d.b * switchRoot.s) - height
+                        width: d.w * switchRoot.s
+                        height: width
+                        radius: width/2
+                        color: "white"
+
+                        Behavior on x { NumberAnimation { duration: 600; easing.type: Easing.OutQuad } }
+
                         transform: Translate {
                             id: mainCloudTrans
                             Behavior on x { NumberAnimation { duration: 1000 } }
@@ -161,12 +174,13 @@ Window {
                                 mainCloudTrans.x = (Math.random() > 0.5 ? range : -range)
                                 mainCloudTrans.y = (Math.random() > 0.5 ? range : -range)
                             }
+                            onRunningChanged: if(!running) { mainCloudTrans.x = 0; mainCloudTrans.y = 0; }
                         }
                     }
                 }
             }
 
-            // --- [D] 星星 (Stars) ---
+            // --- [D] 星星 (带斥力逻辑) ---
             Item {
                 id: starsContainer
                 width: parent.width
@@ -193,16 +207,26 @@ Window {
                 Repeater {
                     model: starsContainer.starData.length
                     delegate: Item {
+                        id: starItem
                         property var d: starsContainer.starData[index]
-                        x: d.x * switchRoot.s; y: d.y * switchRoot.s
-                        width: d.sz * 2 * switchRoot.s; height: width
                         
-                        // 使用 Shape 绘制内凹四角星
+                        // --- 斥力计算 ---
+                        property real baseX: d.x * switchRoot.s
+                        property real proximityFactor: d.x / 100.0
+                        property real pushOffset: (switchRoot.isDark && interactArea.containsMouse) ? (-12 * switchRoot.s * proximityFactor) : 0
+                        
+                        x: baseX + pushOffset
+                        y: d.y * switchRoot.s
+                        width: d.sz * 2 * switchRoot.s
+                        height: width
+                        
+                        Behavior on x { NumberAnimation { duration: 600; easing.type: Easing.OutQuad } }
+
                         Shape {
                             anchors.fill: parent
                             layer.enabled: true; layer.samples: 4
                             ShapePath {
-                                strokeWidth: 0; strokeColor: "transparent"; fillColor: "white"
+                                strokeWidth: 0; fillColor: "white"
                                 startX: width / 2; startY: 0
                                 PathQuad { x: width; y: height / 2; controlX: width / 2; controlY: height / 2 }
                                 PathQuad { x: width / 2; y: height; controlX: width / 2; controlY: height / 2 }
@@ -211,16 +235,27 @@ Window {
                             }
                         }
 
-                        // 悬停闪烁动画
                         transformOrigin: Item.Center
-                        scale: 0 
-                        SequentialAnimation on scale {
-                            loops: Animation.Infinite
-                            running: interactArea.containsMouse
-                            NumberAnimation { to: 1.0; duration: d.dur * 0.2; easing.type: Easing.OutQuad }
-                            NumberAnimation { to: 0.8; duration: d.dur * 0.8 }
-                            PropertyAction { value: 0 }
+                        scale: 1.0
+                        
+                        states: State {
+                            name: "flashing"
+                            when: interactArea.containsMouse
                         }
+                        transitions: [
+                            Transition {
+                                from: ""; to: "flashing"
+                                SequentialAnimation {
+                                    loops: Animation.Infinite
+                                    NumberAnimation { target: starItem; property: "scale"; to: 1.2; duration: d.dur * 0.4; easing.type: Easing.OutQuad }
+                                    NumberAnimation { target: starItem; property: "scale"; to: 0.3; duration: d.dur * 0.6; easing.type: Easing.InQuad }
+                                }
+                            },
+                            Transition {
+                                from: "flashing"; to: ""
+                                NumberAnimation { target: starItem; property: "scale"; to: 1.0; duration: 300; easing.type: Easing.OutQuad }
+                            }
+                        ]
                     }
                 }
             }
@@ -234,7 +269,7 @@ Window {
                 y: 7.5 * switchRoot.s
                 
                 property real startX: 7.5 * switchRoot.s
-                property real endX: startX + 110 * switchRoot.s
+                property real endX: switchRoot.width - width - (7.5 * switchRoot.s)
                 property real hoverOffset: 10 * switchRoot.s
                 
                 x: {
@@ -250,7 +285,6 @@ Window {
                 Behavior on x { NumberAnimation { duration: switchRoot.animTime; easing.type: Easing.Bezier; easing.bezierCurve: switchRoot.cssBezier } }
                 Behavior on color { ColorAnimation { duration: switchRoot.animTime } }
 
-                // 阴影
                 layer.enabled: true
                 layer.effect: DropShadow {
                     transparentBorder: true
@@ -266,7 +300,7 @@ Window {
                     anchors.fill: parent
                     radius: width/2
                     color: "transparent"
-                    opacity: switchRoot.isDark?0.2:1.0
+                    opacity: switchRoot.isDark ? 0.2 : 1.0
                     Behavior on opacity { NumberAnimation { duration: 500 } }
                     Rectangle { 
                         width: parent.width*0.8
@@ -282,9 +316,9 @@ Window {
                 // 陨石坑
                 Item {
                     anchors.fill: parent
-                    opacity: switchRoot.isDark?1:0
-                    visible: opacity>0
-                    rotation: switchRoot.isDark?0:-90
+                    opacity: switchRoot.isDark ? 1 : 0
+                    visible: opacity > 0
+                    rotation: switchRoot.isDark ? 0 : -90
                     Behavior on rotation { NumberAnimation { duration: switchRoot.animTime; easing.type: Easing.Bezier; easing.bezierCurve: switchRoot.cssBezier } }
                     Behavior on opacity { NumberAnimation { duration: 300 } }
                     Repeater { 
@@ -300,62 +334,11 @@ Window {
                     }
                 }
             }
-        } // switchContent 结束
-
-        // =================================================================
-        // 2. 顶层装饰：深色面板与挖孔效果
-        // =================================================================
-        // Shape {
-        //     id: maskPanel 
-        //     anchors.fill: parent
-        //     layer.enabled: true
-        //     layer.samples: 4 
-        //
-        //     property real holeX: (width - switchRoot.width) / 2
-        //     property real holeY: (height - switchRoot.height) / 2
-        //     property real holeW: switchRoot.width
-        //     property real holeH: switchRoot.height
-        //     property real r: holeH / 2 
-        //
-        //     ShapePath {
-        //         fillColor: "#333333" // 面板颜色
-        //         strokeColor: "transparent"
-        //         fillRule: ShapePath.OddEvenFill 
-        //
-        //         startX: 0; startY: 0
-        //         PathLine { x: maskPanel.width; y: 0 }
-        //         PathLine { x: maskPanel.width; y: maskPanel.height }
-        //         PathLine { x: 0; y: maskPanel.height }
-        //         PathLine { x: 0; y: 0 }
-        //
-        //         // 挖孔位置
-        //         PathRectangle {
-        //             x: maskPanel.holeX
-        //             y: maskPanel.holeY
-        //             width: maskPanel.holeW
-        //             height: maskPanel.holeH
-        //             radius: maskPanel.r
-        //         }
-        //     }
-        //
-        //     // 内阴影描边 (装饰)
-        //     Rectangle {
-        //         x: maskPanel.holeX
-        //         y: maskPanel.holeY
-        //         width: maskPanel.holeW
-        //         height: maskPanel.holeH
-        //         radius: maskPanel.r
-        //         color: "transparent"
-        //         border.color: "#80000000"
-        //         border.width: 5 * switchRoot.s
-        //     }
-        // }
+        } 
 
         MouseArea {
             id: interactArea
-            anchors.centerIn: parent
-            width: switchRoot.width
-            height: switchRoot.height
+            anchors.fill: parent
             hoverEnabled: true 
             cursorShape: Qt.PointingHandCursor
             onClicked: switchRoot.isDark = !switchRoot.isDark
