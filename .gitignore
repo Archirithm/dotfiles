@@ -18,6 +18,8 @@
 /xdg.*
 /xfce4
 /mozilla
+/qBittorrent
+/QDirStat
 user-dirs.*
 *.list
 *.ini  
