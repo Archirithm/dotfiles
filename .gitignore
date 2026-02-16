@@ -17,6 +17,7 @@
 /systemd
 /xdg.*
 /xfce4
+/mozilla
 user-dirs.*
 *.list
 *.ini  
