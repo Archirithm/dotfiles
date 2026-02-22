@@ -11,17 +11,23 @@ binds {
 
     // Mod-Shift-/, which is usually the same as Mod-?,
     // shows a list of important hotkeys.
-    Mod+P { spawn "quickshell" "-p" "/home/archirithm/.config/quickshell/Modules/Lock/Lock.qml"; }
-    Mod+M { spawn "sh" "-c" "echo 'dashboard' > /tmp/qs_launcher.pipe"; }
-    Mod+Shift+W { spawn "sh" "-c" "echo 'wallpaper' > /tmp/qs_launcher.pipe"; }
-    Mod+A { spawn "sh" "-c" "echo 'toggle' > /tmp/qs_launcher.pipe"; }
+    // 呼叫主进程开启锁屏
+    Mod+P { spawn "quickshell" "ipc" "call" "lock" "open"; }
+    // 打开/关闭仪表盘 (Dashboard)
+    Mod+M { spawn "quickshell" "ipc" "call" "island" "dashboard"; }
+
+    // 打开/关闭壁纸切换器 (Wallpaper)
+    Mod+Shift+W { spawn "quickshell" "ipc" "call" "island" "wallpaper"; }
+    Mod+D { spawn "quickshell" "ipc" "call" "launcher" "toggle";}
+    // 打开/关闭应用启动器 (Launcher) - 对应之前的 'toggle'
+    Mod+A { spawn "quickshell" "ipc" "call" "island" "launcher"; }
     Mod+Shift+Slash { show-hotkey-overlay; }
     Mod+Ctrl+W {spawn "bash" "/home/archirithm/.config/swww-rofi/swww-rofi.sh";}
     Mod+F1 { spawn-sh "pkill fcitx5 || fcitx5";}
     Mod+F2 {spawn-sh "pkill waybar || true && waybar";}
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
-    Mod+D hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
+    Mod+Ctrl+E hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+E {spawn "kitty" "yazi";}
 
