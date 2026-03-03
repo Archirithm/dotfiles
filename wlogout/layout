@@ -1,6 +1,6 @@
 {
     "label": "lock",
-    "action": "hyprlock",
+    "action": "quickshell ipc call lock open",
     "text": "Lock",
     "keybind": "l"
 }
