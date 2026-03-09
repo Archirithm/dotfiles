@@ -17,10 +17,10 @@ binds {
     Mod+M { spawn "quickshell" "ipc" "call" "island" "dashboard"; }
 
     // 打开/关闭壁纸切换器 (Wallpaper)
-    Mod+Shift+W { spawn "quickshell" "ipc" "call" "island" "wallpaper"; }
+    Mod+Shift+W { spawn "quickshell" "ipc" "call" "island" "hub"; }
     Mod+D { spawn "quickshell" "ipc" "call" "launcher" "toggle";}
     // 打开/关闭应用启动器 (Launcher) - 对应之前的 'toggle'
-    Mod+A { spawn "quickshell" "ipc" "call" "island" "launcher"; }
+    Mod+A { spawn "quickshell" "ipc" "call" "island" "overview"; }
     Mod+Shift+Slash { show-hotkey-overlay; }
     Mod+Ctrl+W {spawn "bash" "/home/archirithm/.config/swww-rofi/swww-rofi.sh";}
     Mod+F1 { spawn-sh "pkill fcitx5 || fcitx5";}
