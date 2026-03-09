@@ -12,3 +12,5 @@ spawn-at-startup "quickshell"
 spawn-sh-at-startup "swww-daemon -n overview"
 
 spawn-sh-at-startup "clipse --listen"
+
+spawn-at-startup "hypridle"
