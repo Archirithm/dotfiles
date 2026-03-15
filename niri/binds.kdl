@@ -16,6 +16,8 @@ binds {
     // 打开/关闭仪表盘 (Dashboard)
     Mod+M { spawn "quickshell" "ipc" "call" "island" "dashboard"; }
 
+    Mod+Shift+T { spawn "quickshell" "ipc" "call" "island" "tools"; }
+
     // 打开/关闭壁纸切换器 (Wallpaper)
     Mod+Shift+W { spawn "quickshell" "ipc" "call" "island" "hub"; }
     Mod+D { spawn "quickshell" "ipc" "call" "launcher" "toggle";}
@@ -24,7 +26,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
     Mod+Ctrl+W {spawn "bash" "/home/archirithm/.config/swww-rofi/swww-rofi.sh";}
     Mod+F1 { spawn-sh "pkill fcitx5 || fcitx5";}
-    Mod+F2 {spawn-sh "pkill waybar || true && waybar";}
+    Mod+F2 {spawn-sh "pkill quickshell || true && quickshell";}
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+Ctrl+E hotkey-overlay-title="Run an Application: rofi" { spawn "rofi" "-show" "drun"; }
