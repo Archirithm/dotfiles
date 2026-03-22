@@ -2,10 +2,10 @@
 version_check = false
 command = "swww"
 
-[templates.waybar]
-input_path = '~/.config/matugen/templates/colors.css'
-output_path = '~/.config/waybar/colors.css'
-post_hook = 'pkill -SIGUSR2 waybar'
+# [templates.waybar]
+# input_path = '~/.config/matugen/templates/colors.css'
+# output_path = '~/.config/waybar/colors.css'
+# post_hook = 'pkill -SIGUSR2 waybar'
 
 [templates.rofi]
 input_path = '~/.config/matugen/templates/rofi-colors.rasi'

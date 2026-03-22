@@ -1,10 +1,10 @@
 return {
-  -- 1. 下载并安装 Catppuccin 插件
   {
     "catppuccin/nvim",
-    lazy = true,
     name = "catppuccin",
+    priority = 1000, -- 保持最高优先级
     opts = {
+      -- 保留 LSP 诊断的漂亮波浪线
       lsp_styles = {
         underlines = {
           errors = { "undercurl" },
@@ -13,51 +13,27 @@ return {
           information = { "undercurl" },
         },
       },
+      -- 开启你目前/未来会用到的插件 UI 整合
       integrations = {
-        aerial = true,
-        alpha = true,
-        cmp = true,
-        dashboard = true,
-        flash = true,
-        fzf = true,
-        grug_far = true,
-        gitsigns = true,
-        headlines = true,
-        illuminate = true,
-        indent_blankline = { enabled = true },
-        leap = true,
-        lsp_trouble = true,
-        mason = true,
-        mini = true,
-        navic = { enabled = true, custom_bg = "lualine" },
-        neotest = true,
-        neotree = true,
-        noice = true,
-        notify = true,
-        snacks = true,
-        telescope = true,
-        treesitter_context = true,
-        which_key = true,
+        cmp = true,             -- 代码补全
+        blink_cmp = true,
+        dashboard = true,       -- 启动页
+        gitsigns = true,        -- Git 提示
+        illuminate = true,      -- 相同单词高亮
+        indent_blankline = { enabled = true }, -- 缩进线
+        mason = true,           -- LSP 包管理器
+        native_lsp = { enabled = true },       -- 原生 LSP
+        noice = true,           -- 消息弹窗
+        telescope = true,       -- 搜索器
+        treesitter = true,      -- 语法高亮
+        which_key = true,       -- 快捷键提示
       },
     },
-    specs = {
-      {
-        "akinsho/bufferline.nvim",
-        optional = true,
-        opts = function(_, opts)
-          if (vim.g.colors_name or ""):find("catppuccin") then
-            opts.highlights = require("catppuccin.special.bufferline").get_theme()
-          end
-        end,
-      },
-    },
-  },
-
-  -- 2. 覆盖 LazyVim 的默认设置，指定使用 catppuccin
-  {
-    "LazyVim/LazyVim",
-    opts = {
-      colorscheme = "catppuccin",
-    },
-  },
+    config = function(_, opts)
+      -- 先把上面的 opts 配置喂给 catppuccin
+      require("catppuccin").setup(opts)
+      -- 然后启动主题
+      vim.cmd.colorscheme("catppuccin")
+    end,
+  }
 }

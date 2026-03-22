@@ -28,7 +28,6 @@ border_style  = { fg = "{{colors.surface_tint.default.hex}}" }
 # : Indicator [[[
 
 [indicator]
-padding = { open = "█", close = "█" }
 
 # : ]]]
 
@@ -38,7 +37,6 @@ padding = { open = "█", close = "█" }
 [tabs]
 active    = { fg = "{{colors.primary.default.hex}}", bold = true, bg = "{{colors.surface.default.hex}}" }
 inactive  = { fg = "{{colors.secondary.default.hex}}", bg = "{{colors.surface.default.hex}}" }
-sep_inner = { open = "[", close = "]" }
 
 # : ]]]
 
@@ -64,8 +62,8 @@ unset_alt  = { bg = "{{colors.surface_variant.default.hex}}", fg = "{{colors.on_
 # : Status [[[
 
 [status]
-sep_left  = { open = "🭁", close = "🭠" }
-sep_right = { open = "🭁", close = "🭠" }
+sep_left  = { open = "", close = "" }
+sep_right = { open = "", close = "" }
 
 # Permissions
 perm_type  = { fg = "{{colors.secondary.default.hex | auto_lightness: 30.0}}" }
